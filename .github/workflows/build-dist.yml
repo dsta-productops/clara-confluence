@@ -1,0 +1,58 @@
+name: Build dist
+
+# Rebuilds dist/ from core/ on every push and commits it back only when the
+# actual content changes. Differences limited to the claraSourceSha provenance
+# stamp (which changes every commit) are ignored, to keep history clean.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "core/**"
+      - "package.json"
+      - ".github/workflows/build-dist.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-dist-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm install
+
+      - name: Build dist
+        run: npm run build
+
+      - name: Commit dist if content changed (ignore claraSourceSha-only diffs)
+        run: |
+          git add dist
+          if git diff --cached --quiet dist; then
+            echo "dist unchanged"; exit 0
+          fi
+          # Any staged change other than a claraSourceSha: line?
+          nonsha=$(git diff --cached -U0 dist \
+            | grep -E "^[+-]" | grep -vE "^(\+\+\+|---)" \
+            | grep -vE "^[+-]claraSourceSha:" | head -1)
+          if [ -z "$nonsha" ]; then
+            echo "only claraSourceSha changed — skipping commit"
+            git restore --staged dist
+            git checkout -- dist
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "build: refresh dist [skip ci]"
+          git push
