@@ -10,9 +10,10 @@ expectedOutput: >-
   Markdown PRD with 8 standard sections — including a Scope table that rolls
   ranked problems up into product modules (module / rolls-up-ranks / core job)
   and prioritised user stories in two layers: a summary table (id·rank·priority
-  / as-a / i-want / so-that / evidence) plus an expanded block per build-bound
-  story (Why this priority / Independent Test / Given-When-Then acceptance
-  scenarios). Clarifying questions where input is incomplete.
+  / as-a / i-want / so-that / evidence) plus an expanded block for every story
+  (Why this priority / Independent Test / Given-When-Then acceptance scenarios),
+  with thin-evidence stories flagged rather than dropped. Clarifying questions
+  where input is incomplete.
 inputsFrom:
   - problem-impact-ranker
   - research-synthesiser
@@ -47,7 +48,7 @@ confluenceContext:
   outputPathTemplate: 'Knowledge Base/{{track}}/PRDs/{{prd-title}}'
 visibility: public
 source: clara
-claraSourceSha: 0b92f670bc44a85219cc79b963f139cfeb4223be
+claraSourceSha: 93a0f0a098ef12f090ee38f33082f1b1b1b7fe8b
 copyBlock: Use CLARA's `prd-generator` for <programme name>.
 ---
 
@@ -75,7 +76,7 @@ Before sharing the PRD with stakeholders, walk through these checks. Most teams 
 - **Success criteria** are measurable and capability-focused — what the capability or product has to be able to do, and to what threshold. No "users will feel more confident" non-criteria.
 - **Scope table** rolls every relevant rank up into a module (or explicitly drops it to Out of scope). No ranked problem is silently unaccounted for; "Out of scope" names the rank and the reason.
 - **User-story summary table** is ordered by priority, every row's `ID · rank · priority` ties back to the ranking, and every Evidence cell cites a real verbatim/observation with its source ref. Stories describe outcomes, not features.
-- **Expanded stories** exist for every build-bound story, each with a **Why this priority** that references the ranking and neighbouring stories (dependencies/supersessions named), an **Independent Test** that is genuinely self-contained (or names what it depends on), and **Acceptance Scenarios** as Given/When/Then triples covering happy path, tie-break/edge, and exception. No invented scenarios — gaps are flagged, not filled.
+- **Expanded stories** exist for *every* story in the summary table (none is table-only), each with a **Why this priority** that references the ranking and neighbouring stories (dependencies/supersessions named), an **Independent Test** that is genuinely self-contained (or names what it depends on), and **Acceptance Scenarios** as Given/When/Then triples covering happy path, tie-break/edge, and exception. No invented scenarios — a thin story keeps its block but marks scenarios `TBD — needs [X]` and flags it in Open questions.
 - **Constraints and dependencies** name every external thing the work depends on. Re-read with "what would block this?" in mind.
 - **Open questions** are honest. The first draft is supposed to be wrong in interesting ways; the open questions are where you flag what you don't know.
 - **Persona references** link to specific persona pages — no implicit "the user".
