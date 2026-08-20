@@ -99,7 +99,7 @@ Knowledge Base / {{track}} / <artefact-type> / <name>
 
 - **`Knowledge Base`** — literal page name. The top-level container for all research artefacts produced across the Research, Design, and Test phases in a programme's space. One per space.
 - **`{{track}}`** — the track this artefact belongs to. Tracks vary by programme — workstream, capability area, feature line, sub-system, or any other meaningful slice. If the artefact spans tracks, the literal track name is **`Programme-wide`**.
-- **`<artefact-type>`** — the artefact category (e.g. `Personas`, `Journeys`, `Research-synthesis`, `Problem-impact-analysis`, `Prior-knowledge`, `PRDs`, `Before-after-journeys`, `Interview-guides`, `Capability-storyboards`, `Test-plans`, `Field-notes`). The artefact brief tells you which value to use.
+- **`<artefact-type>`** — the artefact category (e.g. `Personas`, `Journeys`, `Research-synthesis`, `Problem-impact-analysis`, `Heuristic-evaluations`, `Prior-knowledge`, `PRDs`, `Before-after-journeys`, `Interview-guides`, `Capability-storyboards`, `Test-plans`, `Field-notes`). The artefact brief tells you which value to use.
 - **`<name>`** — the specific artefact, e.g. a persona name, a journey scope, a topic slug.
 
 #### Examples
@@ -203,17 +203,18 @@ The artefact-type folders created at every level (Programme-wide and each track)
 5. `Personas`
 6. `Journeys`
 7. `Problem-impact-analysis`
+8. `Heuristic-evaluations`
 
 **Research phase — digital programmes additionally get:**
 
-8. `Service-blueprints`
-9. `PRDs`
+9. `Service-blueprints`
+10. `PRDs`
 
 **Research phase — engineering programmes additionally get:**
 
-8. `Operational-scenarios`
-9. `Capability-specs`
-10. `Mission-threads`
+9. `Operational-scenarios`
+10. `Capability-specs`
+11. `Mission-threads`
 
 **Design phase — digital programmes only:**
 
@@ -360,6 +361,7 @@ When the user asks for a Research artefact, identify which one applies and follo
 - **`before-after-journey-mapper`** — map a phase-by-phase before/after user journey — today's current-state steps beside the future-state with the product — each phase tagged with the ranked problems it addresses, so stakeholders can see what the PRD changes → `Knowledge Base/{{track}}/Before-after-journeys/{{journey-scope}}`
 - **`capability-spec-generator`** — derive measurable capability requirements from an operational scenario → `Knowledge Base/{{track}}/Capability specs/{{capability-name}}`
 - **`capability-storyboard-scripter`** — script a visual storyboard showing how a capability is exercised end-to-end → `Knowledge Base/{{track}}/Capability-storyboards/{{storyboard-title}}`
+- **`heuristic-evaluator`** — conduct a Nielsen heuristic usability evaluation of an existing product from screenshots, a live URL, or a PDF/deck — producing a scored, evidence-anchored report with per-heuristic compliance, severity-rated findings, and a prioritised remediation roadmap → `Knowledge Base/{{track}}/Heuristic-evaluations/{{product-name}}`
 - **`interview-guide-generator`** — generate a field-ready interview guide that surfaces the data the team needs → `Knowledge Base/{{track}}/Interview-guides/{{topic}}`
 - **`journey-map-drafter`** — draft a current-state journey map for a persona → `Knowledge Base/{{track}}/Journeys/{{journey-scope}}`
 - **`mission-thread-mapper`** — map an end-to-end mission thread for the operational task a capability supports → `Knowledge Base/{{track}}/Mission threads/{{mission-task}}`
@@ -681,6 +683,156 @@ When you have Confluence MCP tools available and are about to create or update a
 You do **not** apply Confluence labels. The MCP does not expose a label-apply tool, and the path discipline above is the canonical retrieval mechanism — every artefact lives at a predictable path, discoverable via `getConfluencePageDescendants` or CQL ancestor queries. Do not promise labels in your filing summary; do not ask the user to apply them. The path is the contract.
 
 - Create a new page at `Knowledge Base/{{track}}/Capability-storyboards/{{storyboard-title}}`. Link to the operational scenario page and the capability spec (if used).
+- In copy-paste mode: return the markdown and the user will file it manually.
+```
+
+### Heuristic evaluator (`heuristic-evaluator`)
+
+```
+You are helping me conduct a Nielsen heuristic usability evaluation of an existing product from screenshots, a live URL, or a PDF/deck — producing a scored, evidence-anchored report with per-heuristic compliance, severity-rated findings, and a prioritised remediation roadmap.
+
+Step 1 — Confirm the run context.
+
+At the start of every artefact run, elicit the programme and track tokens before doing anything else.
+
+- **Ask which programme this is for** (`{{programme}}`). The programme is the named DSTA initiative the user is working on (e.g. SKYPROTECT). It is **not** the deployment environment (ANZ C, on-prem, internet) — those are LLM-hosting contexts, not programmes; do not confuse them. This is a **sanity check** — you are operating inside that programme's Confluence space, but the token does not appear in output paths. Capture it so the user can confirm you are in the right space before you file anything.
+- **Ask which track within the programme this artefact belongs to** (`{{track}}`). Tracks vary by programme — workstream, capability area, feature line, sub-system, or any other meaningful slice. The user knows the track names for their own programme; you do not invent them. If the artefact spans tracks (umbrella scope), the literal answer is **`Programme-wide`**.
+
+The artefact brief may ask for additional tokens (a topic, a persona name, a journey scope). Elicit those after `{{programme}}` and `{{track}}` are confirmed.
+
+**Programme type** is not elicited at run time. Once `{{programme}}` is confirmed, CLARA reads the `Programme type` field from the `Knowledge Base` page body to determine whether the programme is digital or engineering. This was set once during `setup-kb` and does not need to be asked again. If the field is missing or unreadable, CLARA asks the user to confirm the programme type before proceeding.
+
+- **Product name** — the product and the slice under evaluation (e.g. "Oracle HCM — Absence & Onboarding"). Becomes `{{product-name}}`.
+- **Evaluation mode** — competitor / existing-system-to-improve / decommissioning / standalone. Sets origin attribution and whether Appendix B applies.
+- **Task scenarios** — the one or two end-to-end tasks to walk. If not given, CLARA proposes them from the screens and confirms.
+
+Step 2 — Gather inputs.
+
+Every artefact in the Knowledge Base lives at one of two scopes:
+
+- **Programme-wide** — umbrella artefacts that apply across all tracks in a programme. Filed under `Knowledge Base/Programme-wide/`.
+- **Track-level** — artefacts specific to a single track within the programme. Filed under `Knowledge Base/{{track}}/`.
+
+When a downstream artefact needs upstream input (e.g. a journey-map-drafter needs a persona), search **both** scopes:
+
+```
+Knowledge Base / {{track}} / <artefact-type> / *
+Knowledge Base / Programme-wide / <artefact-type> / *
+```
+
+When the same artefact-type exists in both locations, the **track-level version takes precedence**. The programme-wide version is the fallback.
+
+The fallback is **visible**, not silent. Tell the user which version you used and why, so they can see when track-level material is missing and whether the programme-wide fallback is appropriate.
+
+- Take in the product material the user supplies: screenshots, a live URL (browse it), or a PDF/deck. **Number every screen as you go** (`S1`, `S2`, …) so each finding cites a specific screen; keep a running screen list.
+- Confirm the **evaluation mode** and the **task scenarios** before inspecting — restate the scenarios back to the user in the order they occur.
+- Optionally read a prior-knowledge summary at `Knowledge Base/{{track}}/Prior-knowledge/*` (or programme-wide) for grounding.
+- If material is thin (too few screens to walk a whole task, no error/validation states, a URL you cannot reach), say so up front and scope the evaluation to what the evidence supports — do not infer findings you cannot see.
+
+Step 3 — Draft.
+
+Run the standard four-step protocol — **familiarisation → independent inspection → severity rating → consolidation** — then write the report. Evaluate strictly against **Nielsen's 10 heuristics**.
+
+## The framework — Nielsen's 10 heuristics
+
+Inspect every screen against these. A finding is always tied to concrete on-screen evidence, never to the principle in the abstract.
+
+| # | Heuristic | Principle |
+|---|---|---|
+| H1 | Visibility of system status | Keep users informed with timely, appropriate feedback. |
+| H2 | Match between system & real world | Speak the users' language; follow real-world conventions. |
+| H3 | User control & freedom | Provide clearly marked exits, undo and redo. |
+| H4 | Consistency & standards | Follow platform and internal conventions; avoid ambiguity. |
+| H5 | Error prevention | Design out error-prone conditions before they occur. |
+| H6 | Recognition rather than recall | Make options visible; minimise memory load. |
+| H7 | Flexibility & efficiency of use | Offer accelerators and personalisation for varied users. |
+| H8 | Aesthetic & minimalist design | Remove irrelevant or rarely-needed content. |
+| H9 | Help users recognise, diagnose & recover from errors | Plain-language messages that diagnose and offer a fix. |
+| H10 | Help & documentation | Task-focused, searchable, in-context help. |
+
+## Severity rating (Nielsen 0–4)
+
+Rate each finding on the 0–4 scale. Severity is a **composite of frequency (how often it is met), impact (how hard it is to overcome), and persistence (whether users can learn to avoid it)** — a high-frequency, high-impact, persistent problem on a task everyone must do rates far above a cosmetic blemish on a rare screen.
+
+| Rating | Meaning | Action implied |
+|---|---|---|
+| 4 | Usability catastrophe | Imperative to fix before release |
+| 3 | Major usability problem | Important — high priority |
+| 2 | Minor usability problem | Low priority |
+| 1 | Cosmetic problem | Fix if time permits |
+| 0 | Not a usability problem | — |
+
+## Origin attribution
+
+Tag every finding by where the fix lives. The two classes depend on the mode:
+
+- **Existing-system / decommissioning modes** (a product you own or can change): `CFG` = tenant **configuration/content** (fixable in-house) vs `PRD` = **delivered product/platform** (needs the vendor or a code extension). This split is what tells the team how much they can fix without waiting on a release.
+- **Competitor / standalone modes**: attribution is usually not actionable for you, so tag origin as `—` (or note "observed" vs "inferred") and **skip Appendix B**.
+
+## Scoring model
+
+1. **Deductions.** For each heuristic, sum a deduction `D` from its findings, weighting by severity (a sev-4 deducts far more than a sev-1). State the per-heuristic `D` you used.
+2. **Per-heuristic score.** Convert with the saturating function `score = 60 / (6 + D)` — a clean heuristic scores 10; scores fall steeply with the first serious problems then flatten, mirroring how the first catastrophe defines the experience.
+3. **Criticality weighting.** Combine the ten scores with weights that **sum to 1.0**, reflecting how consequential each principle is *for this product's context* (for transactional, novice-heavy, compliance-bearing flows, weight Visibility, Match, Consistency, Error prevention and Error recovery highest). State the weights and the one-line reason. Multiply the weighted average by 10 for the final index.
+4. **Banding.** `0–40 Critical · 40–55 Poor · 55–70 Adequate · 70–85 Good · 85–100 Excellent`.
+5. **Achievable-via-fix index.** Re-run the score with the in-house-fixable (`CFG`) deductions removed, to show how far configuration/content work alone lifts the experience. Report both the current index and the achievable one.
+
+## Report structure
+
+Produce the report with one `##` heading per section:
+
+1. **Cover / rating** — product and slice, overall index `/100` + band, headline counts (total findings, severity-4 catastrophes, achievable-via-fix index), framework ("Nielsen's 10 heuristics"), scope (N screens, M task scenarios).
+2. **Executive summary** — one paragraph on what was assessed and what was found, a small stat row (overall / findings / catastrophes / config-fixable %), then **"The findings to fix first"** — the catastrophes, each with its ID, one-line description, and why it matters most.
+3. **Methodology** — what a heuristic evaluation is and the four-step protocol; the 10-heuristic table; the 0–4 severity scale; how the overall score was derived (the model above); and a **Scope & limitations** block — the static-capture caveat (error states, responsive breakpoints, and assistive-tech behaviour could not be exercised), that contrast is estimated not measured, and the **single-evaluator caveat** (one evaluator detects ~a third of problems; 3–5 are needed for broad coverage, so findings are a lower bound and the score an upper bound on quality).
+4. **Scorecard** — per-heuristic compliance (current vs achievable-via-fix); the distribution of findings by severity and scenario; and a "findings at a glance" table (per scenario: catastrophe / major / minor / cosmetic / total / config-fixable).
+5. **Scenario walkthroughs** — one section per task scenario. Open with a one-line narrative of the flow and a short **"What works well"** note (name the genuine strengths, cited to screens). Then list **every** finding *in the order it occurs in the flow*, each as a labelled block:
+
+   > **[ID] — [short title]**  ·  [Heuristic Hn]  ·  **SEV [0–4]**  ·  [origin: CFG / PRD / —]
+   >
+   > [Description tied to the specific screen and element: what is on screen, why it violates the heuristic, and the consequence.]
+   >
+   > **Recommendation.** [Concrete, specific fix.]
+   >
+   > *Evidence: screen S[n] — [the exact element/marker on that screen].*
+
+   Give findings stable IDs prefixed by scenario (e.g. `A-08` for Absence, `J-07` for the Journey) so they cross-reference. Every finding appears in full here — none exists only in the appendix.
+6. **Appendix A — complete findings register** — every finding as one row of a single index table: `ID · H · Sev · Src · Issue · Recommendation`. A consolidated, sortable repeat of the walkthroughs; add nothing new here.
+7. **Recommendations — prioritised remediation roadmap** — group findings into three waves and present each as a `Findings · Action · Owner` table:
+   - **P0 — fix before wider rollout** — the catastrophes and their trust/compliance-critical siblings.
+   - **P1 — fix next cycle** — major consistency, language and guidance issues.
+   - **P2 — address opportunistically** — minor and cosmetic polish.
+8. **Appendix B — where each fix is made** *(existing-system / decommissioning modes only)* — a `Tool/layer · Typical findings · What it controls` table mapping findings to the part of the product that owns the change, separating in-house-configurable work from work needing the vendor or an extension. Skip this section in competitor / standalone modes.
+9. **Closing note** — a short, fair summary: what the product gets right, what holds usability back, and whether the gap is a product ceiling or (usually) fixable configuration/content.
+
+Rules:
+- **Evidence over principle.** Every finding names a specific screen and element. If you cannot point to it on a screen, it is not a finding — it is a hypothesis; flag it as inferred or leave it out.
+- **Don't invent.** No fabricated screens, counts, quotes, or scores. If the material can't support a section (e.g. only one scenario supplied), say so rather than padding.
+- **Be fair.** Record genuine strengths in "What works well" — a report that is all deductions is neither accurate nor persuasive.
+- Where input is incomplete, ask up to 3 clarifying questions BEFORE scoring.
+
+Output as markdown.
+
+Step 4 — File the output.
+
+When you have Confluence MCP tools available and are about to create or update a page, apply these checks **in order, before filing**.
+
+- **Space check.** Verify a suitable Confluence space exists for this programme. If no space exists, ask the user which space to use before proceeding — do not assume, do not create a new space yourself.
+- **Hierarchy check.** Resolve the full target path by title traversal from `Knowledge Base` down to the artefact-type folder, at write time. The pageId of the leaf folder returned by this traversal is the `parentId` for the write — no other source is permitted. Do **not** use a `parentId` carried from an earlier step, even within the same batch of writes; re-resolve for every write. The path string shown to the user at confirmation must be the literal trail of titles traversed in this step, so the displayed path and the actual write target derive from the same lookup. If any parent page is missing, list the missing parents in the filing confirmation prompt (see `filing.md` step 3) so the user sees and authorises them in the same go as the leaf page — do **not** issue a separate prompt per placeholder. Once the user confirms, create the placeholders top-down, then the leaf page. Body for every placeholder: *"Placeholder — created to support filing structure."* Title each placeholder as follows:
+  - **`Knowledge Base`** — literal, no suffix.
+  - **Track folder** — title is the track name verbatim (`Programme-wide`, `ABC`, etc.). No suffix; track names are unique under `Knowledge Base`.
+  - **Artefact-type folder** — title is `<Artefact-type> ({{parent track}})` — always, even on first creation. Examples: `Personas (Programme-wide)`, `Personas (ABC)`, `Interview-guides (ABC)`, `PRDs (Programme-wide)`. This satisfies Confluence Cloud's space-wide unique-title constraint *predictably* — without the suffix, the first `Personas` folder created gets the clean name and every subsequent one across other tracks has to improvise a disambiguation, which makes filing paths unpredictable for downstream prompts and confusing for users. The artefact-type folder always carries the parent-track suffix; the Confluence breadcrumb already shows the ancestry, so the parens are not visually redundant.
+  - **`Field-notes ({{track}})`** — created at every track level at KB setup time, including `Programme-wide`. Follows the same `({{track}})` suffix rule as all artefact-type folders. Always contains a `_Template — Field note` child page created at setup time. Users drop their own notes inside; CLARA does not file artefacts here.
+  - **`_Template — Field note ({{track}})`** — reserved title for the template placeholder page inside each `Field-notes ({{track}})` folder. Carries the same `({{track}})` suffix as the Field-notes folder it lives in, because Confluence Cloud enforces space-wide unique titles and a programme has more than one Field-notes folder. Created at KB setup time with the standard field note template body (see `conventions/field-notes.md`). Users duplicate this page to start a new note.
+  - **Leaf artefact page** — title is the artefact's own name (`Field operator`, `Shift handover friction`, etc.). Disambiguate only if a real conflict comes up — never preemptively.
+- **No silent fallbacks.** If the full path cannot be created (insufficient permissions, no accessible space, anything else), stop and tell the user exactly what is blocked. Do not file the page anywhere else without explicit confirmation. Do not improvise an alternative path.
+- **Update vs create.** If a page already exists at the target path, ask the user whether to update in place (Confluence's page history preserves the prior version) or to draft a new version at an alternative path. Do not silently overwrite.
+- **Post-write verification.** After each file, fetch the created page and confirm its parent's title matches the artefact-type folder from the brief. If it doesn't, stop and report — do not proceed to the next write. This is a belt-and-braces safety net against the Hierarchy-check discipline failing in practice; the cost is one extra read per write, and it catches stated-path-vs-actual-write divergence at the moment it happens rather than days later.
+
+**Session ID write-back.** When CLARA processes field notes, it stamps a CLARA-assigned Session ID into the metadata block of any note that does not yet have one. This is the one carve-out from the "ask before every KB write" guardrail in `persona.md` — Session IDs stamp automatically, without prompting (rationale: the field is reserved CLARA territory by template convention, the write is non-destructive, and synthesis depends on it being stable). The write-back must succeed before CLARA cites the note in any artefact. If write-back fails (permissions or any other reason), stop and report — do not proceed with an unstamped note. See `conventions/field-notes.md` for the full Session ID convention.
+
+You do **not** apply Confluence labels. The MCP does not expose a label-apply tool, and the path discipline above is the canonical retrieval mechanism — every artefact lives at a predictable path, discoverable via `getConfluencePageDescendants` or CQL ancestor queries. Do not promise labels in your filing summary; do not ask the user to apply them. The path is the contract.
+
+- Create a new page at `Knowledge Base/{{track}}/Heuristic-evaluations/{{product-name}}`. Embed the numbered screenshots inline next to the findings that cite them where the user supplied image files; otherwise reference them by screen number.
 - In copy-paste mode: return the markdown and the user will file it manually.
 ```
 
@@ -1459,6 +1611,7 @@ The fallback is **visible**, not silent. Tell the user which version you used an
 - Look up the **persona(s)** at `Knowledge Base/{{track}}/Personas/*` (fall back to programme-wide) to score Reach — which roles each problem hits, and how often.
 - Search `Knowledge Base/{{track}}/Prior-knowledge/*` and programme-wide for **prior-knowledge summaries** — what's already proven or already in flight. This grounds the Evidence and Value scores.
 - Gather the **raw sources** the problems came from — field notes, workshop/board exports, or a pasted list — for the verbatims and evidence each entry must cite.
+- Search `Knowledge Base/{{track}}/Heuristic-evaluations/*` and programme-wide for a **heuristic evaluation** of an existing or competitor product. Each finding is a candidate problem already scored for severity and tied to a screen — fold them into the register and cite the finding ID as evidence.
 - Optionally read **journeys and service blueprints** in the space to judge Leverage — which problems are one root cause seen from several seats.
 - Show the user everything you found — the friction table, personas, prior-knowledge, and raw sources — and ask them to confirm or refine the problem set before you score it.
 - In copy-paste mode: ask the user to paste the captured problems (or the board/workshop export), plus any verbatims and evidence they have. Ask for each missing input in turn.
@@ -1587,6 +1740,7 @@ The fallback is **visible**, not silent. Tell the user which version you used an
 - Search the programme's space broadly for interview transcripts, field-notes, observation pages, and exercise debriefs. Pages under folders/pages named *Interviews*, *Field notes*, *Sessions*, *Exercises* (or with `interview`, `transcript`, `session-notes`, `observation`, `field-notes`, `exercise` in titles).
 - Search both `Knowledge Base/{{track}}/Prior-knowledge/*` and `Knowledge Base/Programme-wide/Prior-knowledge/*` for prior-knowledge summaries that should ground the synthesis.
 - Search both `Knowledge Base/{{track}}/Interview-guides/*` and `Knowledge Base/Programme-wide/Interview-guides/*` for the interview guide used in the field — the guide's outcome question tells you what the synthesis is meant to answer.
+- Search both `Knowledge Base/{{track}}/Heuristic-evaluations/*` and `Knowledge Base/Programme-wide/Heuristic-evaluations/*` for a heuristic evaluation of an existing or competitor product. Where one exists, treat its severity-rated findings as evidence — they surface friction and inform the problem statement, so fold them in alongside the field notes (cite them by finding ID).
 - Show the user everything you found — separately for the track folder, the Programme-wide folder, and the broader space — and ask them to confirm or refine the set before reading in detail.
 - **Stamp Session IDs first — before synthesising.** Once the field-note set is confirmed, ensure every note in it carries a Session ID. For any note the user created that does not yet have one, auto-assign and stamp it **now**, without prompting (the Session-ID write-back carve-out in `persona.md` and `field-notes.md`). This is a required step that runs *before* any synthesis is drafted, so every piece of evidence is citable by a stable Session ID from the first draft onward. If a stamp fails (e.g. permissions), stop and report — do not synthesise with an unstamped note.
 - In copy-paste mode: ask the user to paste transcripts and observation notes. Mark sessions with `--- Session [N] / [role] / [date] ---` so citations stay traceable.

@@ -17,6 +17,7 @@ inputsFrom:
   - research-synthesiser
   - persona-generator
   - prior-knowledge-summariser
+  - heuristic-evaluator
 confluenceContext:
   inputs:
     - what: >-
@@ -49,10 +50,18 @@ confluenceContext:
         Pages under `Knowledge Base/{{track}}/Journeys/*` and
         `.../Service-blueprints/*`. Used to score Leverage — which problems
         share a single root cause seen from several seats.
+    - what: Heuristic evaluation of an existing/competitor product (optional)
+      description: >-
+        Pages under `Knowledge Base/{{track}}/Heuristic-evaluations/*` or
+        `Knowledge Base/Programme-wide/Heuristic-evaluations/*`. Each
+        severity-rated finding is a candidate problem already scored for
+        severity and grounded to a screen — fold them into the register (cite
+        the finding ID as evidence), and let their severity inform the Severity
+        and Evidence scores.
   outputPathTemplate: 'Knowledge Base/{{track}}/Problem-impact-analysis'
 visibility: public
 source: clara
-claraSourceSha: 93a0f0a098ef12f090ee38f33082f1b1b1b7fe8b
+claraSourceSha: d57eb443b2f500aab9ef02c480b1d74834c2a420
 copyBlock: Use CLARA's `problem-impact-ranker` for <programme name>.
 ---
 
@@ -62,7 +71,7 @@ copyBlock: Use CLARA's `problem-impact-ranker` for <programme name>.
 - **Track** — the slice of the programme this artefact belongs to (workstream, capability area, feature line, etc.), or `Programme-wide` if it spans tracks.
 - **Problem set scope** — which body of problems you're ranking (e.g. "all pre-, during-, and post-ICT problems", or one track's friction). One line.
 - **Source of the problems** — where the captured problems come from (the Research synthesis friction table, a workshop board, a pasted list). Named in the output so the ranking is traceable.
-- **Inputs** — CLARA will search the programme's Confluence space for friction points, themes and problem statement from the research synthesis; persona(s) for the affected roles; prior-knowledge summaries (optional); raw field notes / captured problem sources; journeys and service blueprints (optional). You can also paste fresh material if it's not in Confluence yet.
+- **Inputs** — CLARA will search the programme's Confluence space for friction points, themes and problem statement from the research synthesis; persona(s) for the affected roles; prior-knowledge summaries (optional); raw field notes / captured problem sources; journeys and service blueprints (optional); heuristic evaluation of an existing/competitor product (optional). You can also paste fresh material if it's not in Confluence yet.
 
 ## Where the output lands
 

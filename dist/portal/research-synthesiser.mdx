@@ -14,6 +14,7 @@ expectedOutput: >-
 inputsFrom:
   - interview-guide-generator
   - prior-knowledge-summariser
+  - heuristic-evaluator
 confluenceContext:
   inputs:
     - what: >-
@@ -34,10 +35,17 @@ confluenceContext:
         Search both `Knowledge Base/{{track}}/Interview-guides/*` and `Knowledge
         Base/Programme-wide/Interview-guides/*`. The guide's outcome question
         tells you what the synthesis is meant to answer.
+    - what: Heuristic evaluation of an existing/competitor product (optional)
+      description: >-
+        Search both `Knowledge Base/{{track}}/Heuristic-evaluations/*` and
+        `Knowledge Base/Programme-wide/Heuristic-evaluations/*`. Where one
+        exists, its severity-rated findings are evidence: they surface friction
+        points and feed the problem statement, so they belong in the synthesis
+        alongside the field notes.
   outputPathTemplate: 'Knowledge Base/{{track}}/Research-synthesis'
 visibility: public
 source: clara
-claraSourceSha: 93a0f0a098ef12f090ee38f33082f1b1b1b7fe8b
+claraSourceSha: d57eb443b2f500aab9ef02c480b1d74834c2a420
 copyBlock: Use CLARA's `research-synthesiser` for <programme name>.
 ---
 
@@ -46,7 +54,7 @@ copyBlock: Use CLARA's `research-synthesiser` for <programme name>.
 - **Programme name** — your programme's name (e.g. SKYPROTECT).
 - **Track** — the slice of the programme this artefact belongs to (workstream, capability area, feature line, etc.), or `Programme-wide` if it spans tracks.
 - **Outcome question** — what the research was trying to answer (one line — taken from the interview guide if one exists).
-- **Inputs** — CLARA will search the programme's Confluence space for interview transcripts, field/exercise observation notes, operator session notes; prior-knowledge summary on the topic (optional); interview guide used in the field (optional). You can also paste fresh material if it's not in Confluence yet.
+- **Inputs** — CLARA will search the programme's Confluence space for interview transcripts, field/exercise observation notes, operator session notes; prior-knowledge summary on the topic (optional); interview guide used in the field (optional); heuristic evaluation of an existing/competitor product (optional). You can also paste fresh material if it's not in Confluence yet.
 
 ## Where the output lands
 
