@@ -11,11 +11,11 @@ expectedOutput: >-
   ranked problems up into product modules (module / rolls-up-ranks / core job)
   and prioritised user stories in two layers: a summary table (id·rank·priority
   / as-a / i-want / so-that / evidence) plus an expanded block for every story
-  (Independent Test / robust Gherkin acceptance scenarios covering happy path,
-  invalid input, duplicate/conflict, boundary limits and their transitions,
-  state/permission, and accessibility/non-functional), with thin-evidence
-  stories flagged rather than dropped. Clarifying questions where input is
-  incomplete.
+  (Independent Test / robust unlabelled Gherkin acceptance scenarios covering
+  happy path, invalid input, duplicate/conflict, boundary limits and their
+  transitions, state/permission, and accessibility/non-functional / a per-story
+  'Needs validation' list of assumptions still to confirm). Clarifying questions
+  where input is incomplete.
 inputsFrom:
   - problem-impact-ranker
   - research-synthesiser
@@ -50,7 +50,7 @@ confluenceContext:
   outputPathTemplate: 'Knowledge Base/{{track}}/PRDs/{{prd-title}}'
 visibility: public
 source: clara
-claraSourceSha: 5551c449e2aea701ce5fe31ff0bda77452106750
+claraSourceSha: 82508c8d96f39a71e2ae8771610f891e1d4a34db
 copyBlock: Use CLARA's `prd-generator` for <programme name>.
 ---
 
@@ -80,7 +80,8 @@ Before sharing the PRD with stakeholders, walk through these checks. Most teams 
 - **User-story summary table** is ordered by priority, every row's `ID · rank · priority` ties back to the ranking, and every Evidence cell cites a real verbatim/observation with its source ref. Stories describe outcomes, not features.
 - **Expanded stories** exist for *every* story in the summary table (none is table-only), each with an **Independent Test** that is genuinely self-contained (or names what it depends on).
 - **Every user story has at least one corresponding acceptance scenario** — table rows, expanded blocks, and scenario sets are strictly 1:1. No story is left without a scenario; a thin story still carries a full happy-path Gherkin scenario with `[TBD]` placeholders in its steps, never a bare "TBD" line.
-- **Acceptance Scenarios are robust Gherkin.** Each is one behaviour in `Given … When … Then …` (with `And`/`But`), and — for every story with real interactive behaviour — the set covers the grounds the story actually has: happy path, invalid/missing input, duplicate/conflict, boundary limits at the *exact* edges (soft vs hard, plus the transition back across the threshold, using concrete example values), state/permission, and an accessibility/non-functional scenario wherever status or colour-coding is shown (status by text/icon not colour alone; contrast ≥ 4.5:1; WCAG 2.1 AA). Every `Then` is observable and specific — a named message, value, count, or state, never "it works". No invented thresholds — unspecified limits are `[TBD]` placeholders raised in Open questions, and a thin story keeps its block but marks scenarios `TBD — needs [X]`.
+- **Acceptance Scenarios are robust Gherkin.** Each is one behaviour in `Given … When … Then …` (with `And`/`But`), and — for every story with real interactive behaviour — the set covers the grounds the story actually has: happy path, invalid/missing input, duplicate/conflict, boundary limits at the *exact* edges (soft vs hard, plus the transition back across the threshold, using concrete example values), state/permission, and an accessibility/non-functional scenario wherever status or colour-coding is shown (status by text/icon not colour alone; contrast ≥ 4.5:1; WCAG 2.1 AA). Every `Then` is observable and specific — a named message, value, count, or state, never "it works". Scenarios carry **no** `— label` tags. No invented thresholds — unspecified limits are `[TBD]` placeholders inside the steps.
+- **Every story has a "Needs validation" line** listing the assumptions/thresholds/decisions its scenarios rest on that are not yet grounded (each naming what to confirm and with whom/how), or "None — every scenario is grounded in cited evidence" when there's nothing outstanding.
 - **Constraints and dependencies** name every external thing the work depends on. Re-read with "what would block this?" in mind.
 - **Open questions** are honest. The first draft is supposed to be wrong in interesting ways; the open questions are where you flag what you don't know.
 - **Persona references** link to specific persona pages — no implicit "the user".

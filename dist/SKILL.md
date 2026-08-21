@@ -1437,42 +1437,54 @@ Produce a PRD using this structure, one `##` heading per section:
    - The `ID · rank · priority` cell ties each story back to the rank(s) it serves in the Problem-impact analysis (e.g. `#1 · R1/R3 · P1`), so priority is traceable to impact, not asserted. Priority (`P1`, `P2`, …) is the build order — usually tracking the impact rank, but a story may be re-prioritised if it is a prerequisite for, or superseded by, another; when it diverges from the rank, add a one-line note in the Evidence cell saying why.
    - Every row's Evidence cell must cite real grounding — a session verbatim, an observation, or a document — with its source ref. If a story has no recorded evidence, say so and flag it; do not invent a quote.
 
-   **5b. Expanded stories** — follow the table with a detailed block for **every** story in it, in priority order. No story is table-only: each row above gets a matching block below, so the PRD is a complete build spec rather than a v0 with follow-ups deferred.
+   The expanded stories (5b) are written up flush-left, below the table — see the format immediately after this list.
 
-   **Every user story must be accompanied by at least one acceptance scenario.** The summary-table rows, the expanded blocks, and their scenario sets are strictly 1:1 — no story ships without a corresponding scenario. A story with no scenario is an incomplete story, not an acceptable state.
-
-   > **User Story [n] — [short name] (Priority: P[n])**
-   >
-   > As a [persona / role], I want [capability, phrased as an outcome] so that [the benefit].
-   >
-   > **Independent Test:** [how this story can be verified on its own — the observable behaviour a tester would set up and check, without depending on other unbuilt stories.]
-   >
-   > **Acceptance Scenarios:**
-   >
-   > 1. **Given** [the happy-path starting state], **When** [the primary action], **Then** [the specific observable success — a named screen, message, value, or state], **And** [any follow-on effect]. — *happy path*
-   > 2. **Given** [an attempt with missing or invalid input], **When** [I submit], **Then** [a clear, specific validation error naming the field], **And** [the user can correct and retry]. — *invalid input*
-   > 3. **Given** [a conflicting or duplicate state — e.g. an entity already exists / already in the target status], **When** [I repeat the action], **Then** [the system prevents it and explains why]. — *duplicate / conflict*
-   > 4. **Given** [the system at exactly the soft limit / lower boundary], **When** [the boundary action occurs], **Then** [the last-allowed behaviour, e.g. permit-but-warn]. — *boundary (soft)*
-   > 5. **Given** [the system at exactly the hard cap / upper boundary], **When** [the action occurs], **Then** [the first-disallowed behaviour, e.g. block with a named message]. — *boundary (hard)*
-   > 6. **Given** [the boundary condition has cleared — e.g. count drops back below the cap], **When** [the action is retried], **Then** [normal behaviour resumes]. — *recovery / transition*
-   > 7. **Given** [a UI that surfaces status or thresholds], **When** [it is displayed], **Then** [the state is conveyed by text or icon in addition to colour (never colour alone) to satisfy WCAG 2.1 AA], **And** [indicator colours meet a minimum 4.5:1 contrast ratio against their background]. — *accessibility / non-functional*
-
-   - **Independent Test** describes a self-contained check: the story should be verifiable without waiting on other unbuilt stories. If it genuinely can't be tested independently, say what it depends on rather than pretending it can.
-   - **Acceptance Scenarios use Gherkin.** Every scenario is one behaviour written as `Given … When … Then …`, with `And` / `But` for extra context, actions, or outcomes. Steps are declarative (describe the state and the observable outcome, not the UI mechanics). Number the scenarios; a short trailing `— *label*` naming which ground it covers is encouraged.
-   - **Every story carries at least one scenario — the happy path is the floor.** No story is exempt. A story with genuinely no interactive behaviour still gets its one happy-path scenario asserting the observable outcome.
-   - **Be robust — cover all the grounds, not just the happy path.** For each story with real interactive behaviour, work through this checklist and write a scenario for every class the story actually has:
-     - **Happy path** — valid inputs produce the specific, named success outcome (a confirmation screen, a queue position, a status change) — never a vague "it works".
-     - **Invalid / missing input** — each mandatory field or malformed input yields a clear, specific validation error the user can act on, and a path to correct it.
-     - **Duplicate / conflict / idempotency** — repeating the action, or acting on an entity already in the target state, is prevented and explained (e.g. re-registering an already-Active record).
-     - **Boundary values and limits** — write scenarios at the *exact* edges: the last value that is allowed and the first that is not. Distinguish **soft** thresholds (permit-but-warn/track) from **hard** caps (block), and include the **transition back** across a threshold (the limit clears → normal behaviour resumes). Use concrete example counts (the 50th, 51st, 60th, 61st), not "many".
-     - **State / permission / sequence** — who may act, in which state; blocked actions say why and what to do next; out-of-order actions are handled.
-     - **Non-functional & accessibility** — whenever a story renders status, thresholds, or colour-coded indicators, add an accessibility scenario: status conveyed by **text or icon in addition to colour (never colour alone)** and indicator colours meeting **≥ 4.5:1 contrast** to satisfy **WCAG 2.1 AA**. Fold in other measurable non-functionals the story implies (latency, concurrency, audit).
-   - **Ground every threshold and value in evidence.** Pull limits, statuses and messages from the Success criteria, the ranking, or the research — do not invent a `50`/`60`/contrast figure the inputs don't support. Where a specific threshold is genuinely unspecified, write the scenario with a `[TBD — needs the actual limit]` placeholder and raise it under Open questions rather than fabricating a number.
-   - **Every `Then` is observable and specific** — a named message, screen, field, value, count, or state a tester can assert against. No `Then the system works correctly`.
-   - **Thin evidence never means zero scenarios.** Where a story's evidence is too thin to specify every detail, still write at least the happy-path scenario as full Gherkin, using `[TBD — the specific value/decision still missing]` placeholders *inside* the `Given`/`When`/`Then` steps, and raise each gap under Open questions. Do not invent the missing specifics, and do not replace the scenario with a bare "TBD" line — every story keeps a real, structured scenario with the gaps named in place.
 6. **Success criteria** (measurable, capability-focused) — what the capability has to be able to do, and to what threshold. No "users will feel more confident" non-criteria.
 7. **Constraints and dependencies** — every external thing the work depends on; re-read with "what would block this?" in mind.
 8. **Open questions** — honest unknowns; the first draft is meant to be wrong in interesting ways.
+
+## 5b. Expanded user stories
+
+Below the summary table, write a detailed block for **every** story in it, in priority order. No story is table-only: each row above gets a matching block below, so the PRD is a complete build spec rather than a v0 with follow-ups deferred.
+
+**Every user story must be accompanied by at least one acceptance scenario.** The summary-table rows, the expanded blocks, and their scenario sets are strictly 1:1 — no story ships without a corresponding scenario. A story with no scenario is an incomplete story, not an acceptable state.
+
+Use this block format per story:
+
+> **User Story [n] — [short name] (Priority: P[n])**
+>
+> As a [persona / role], I want [capability, phrased as an outcome] so that [the benefit].
+>
+> **Independent Test:** [how this story can be verified on its own — the observable behaviour a tester would set up and check, without depending on other unbuilt stories.]
+>
+> **Acceptance Scenarios:**
+>
+> 1. **Given** [the happy-path starting state], **When** [the primary action], **Then** [the specific observable success — a named screen, message, value, or state], **And** [any follow-on effect].
+> 2. **Given** [an attempt with missing or invalid input], **When** [I submit], **Then** [a clear, specific validation error naming the field], **And** [the user can correct and retry].
+> 3. **Given** [a conflicting or duplicate state — e.g. an entity already exists / already in the target status], **When** [I repeat the action], **Then** [the system prevents it and explains why].
+> 4. **Given** [the system at exactly the soft limit / lower boundary], **When** [the boundary action occurs], **Then** [the last-allowed behaviour, e.g. permit-but-warn].
+> 5. **Given** [the system at exactly the hard cap / upper boundary], **When** [the action occurs], **Then** [the first-disallowed behaviour, e.g. block with a named message].
+> 6. **Given** [the boundary condition has cleared — e.g. count drops back below the cap], **When** [the action is retried], **Then** [normal behaviour resumes].
+> 7. **Given** [a UI that surfaces status or thresholds], **When** [it is displayed], **Then** [the state is conveyed by text or icon in addition to colour (never colour alone) to satisfy WCAG 2.1 AA], **And** [indicator colours meet a minimum 4.5:1 contrast ratio against their background].
+>
+> **Needs validation:** [the assumptions, thresholds, or decisions the scenarios above rest on that are not yet grounded in evidence and must be confirmed — by research, a stakeholder, or a design decision — before the acceptance scenarios can be treated as valid. One short bullet per item, naming *what* to confirm and *with whom / how*: e.g. "the 50/60 capacity limits — confirm with the clinic manager"; "the exact mandatory registration fields — confirm against the intake form"; "the confirmation-message wording — pending UX copy". Write "None — every scenario is grounded in cited evidence" when nothing is outstanding.]
+
+Rules for the expanded stories:
+
+- **Do not label scenarios.** Write each scenario as plain Gherkin only — no trailing `— happy path` / `— invalid input` tag. The coverage classes below are a checklist for deciding *what to write*, not text that appears in the PRD.
+- **Independent Test** describes a self-contained check: the story should be verifiable without waiting on other unbuilt stories. If it genuinely can't be tested independently, say what it depends on rather than pretending it can.
+- **Acceptance Scenarios use Gherkin.** Every scenario is one behaviour written as `Given … When … Then …`, with `And` / `But` for extra context, actions, or outcomes. Steps are declarative (describe the state and the observable outcome, not the UI mechanics). Number the scenarios.
+- **Every story carries at least one scenario — the happy path is the floor.** No story is exempt. A story with genuinely no interactive behaviour still gets its one happy-path scenario asserting the observable outcome.
+- **Be robust — cover all the grounds, not just the happy path.** For each story with real interactive behaviour, work through this checklist and write a scenario for every class the story actually has (these class names guide your reasoning; they do not appear in the output):
+  - **Happy path** — valid inputs produce the specific, named success outcome (a confirmation screen, a queue position, a status change) — never a vague "it works".
+  - **Invalid / missing input** — each mandatory field or malformed input yields a clear, specific validation error the user can act on, and a path to correct it.
+  - **Duplicate / conflict / idempotency** — repeating the action, or acting on an entity already in the target state, is prevented and explained (e.g. re-registering an already-Active record).
+  - **Boundary values and limits** — write scenarios at the *exact* edges: the last value that is allowed and the first that is not. Distinguish **soft** thresholds (permit-but-warn/track) from **hard** caps (block), and include the **transition back** across a threshold (the limit clears → normal behaviour resumes). Use concrete example counts (the 50th, 51st, 60th, 61st), not "many".
+  - **State / permission / sequence** — who may act, in which state; blocked actions say why and what to do next; out-of-order actions are handled.
+  - **Non-functional & accessibility** — whenever a story renders status, thresholds, or colour-coded indicators, add an accessibility scenario: status conveyed by **text or icon in addition to colour (never colour alone)** and indicator colours meeting **≥ 4.5:1 contrast** to satisfy **WCAG 2.1 AA**. Fold in other measurable non-functionals the story implies (latency, concurrency, audit).
+- **Ground every threshold and value in evidence.** Pull limits, statuses and messages from the Success criteria, the ranking, or the research — do not invent a `50`/`60`/contrast figure the inputs don't support. Where a specific threshold is genuinely unspecified, write the scenario with a `[TBD — needs the actual limit]` placeholder and list it in that story's **Needs validation** section.
+- **Every `Then` is observable and specific** — a named message, screen, field, value, count, or state a tester can assert against. No `Then the system works correctly`.
+- **Thin evidence never means zero scenarios.** Where a story's evidence is too thin to specify every detail, still write at least the happy-path scenario as full Gherkin, using `[TBD — the specific value/decision still missing]` placeholders *inside* the `Given`/`When`/`Then` steps, and record each gap in that story's **Needs validation** section. Do not invent the missing specifics, and do not replace the scenario with a bare "TBD" line — every story keeps a real, structured scenario with the gaps named in place.
 
 Rules:
 - Where input is incomplete, ask the user up to 3 clarifying questions BEFORE drafting. Don't invent details.
