@@ -1434,7 +1434,7 @@ Produce a PRD using this structure, one `##` heading per section:
    |---|---|---|---|---|
    | #1 · R[rank] · P1 | [persona / role] | [capability, phrased as an outcome not a feature] | [the benefit] | [verbatim quote or observation + source ref + impact score; flag `[contested]` / `[research gap]` / `[assumption]` here rather than inventing] |
 
-   - The `ID · rank · priority` cell ties each story back to the rank(s) it serves in the Problem-impact analysis (e.g. `#1 · R1/R3 · P1`), so priority is traceable to impact, not asserted. Priority (`P1`, `P2`, …) is the build order — usually tracking the impact rank, but a story may be re-prioritised if it is a prerequisite for, or superseded by, another (say why in the expanded block).
+   - The `ID · rank · priority` cell ties each story back to the rank(s) it serves in the Problem-impact analysis (e.g. `#1 · R1/R3 · P1`), so priority is traceable to impact, not asserted. Priority (`P1`, `P2`, …) is the build order — usually tracking the impact rank, but a story may be re-prioritised if it is a prerequisite for, or superseded by, another; when it diverges from the rank, add a one-line note in the Evidence cell saying why.
    - Every row's Evidence cell must cite real grounding — a session verbatim, an observation, or a document — with its source ref. If a story has no recorded evidence, say so and flag it; do not invent a quote.
 
    **5b. Expanded stories** — follow the table with a detailed block for **every** story in it, in priority order. No story is table-only: each row above gets a matching block below, so the PRD is a complete build spec rather than a v0 with follow-ups deferred.
@@ -1444,8 +1444,6 @@ Produce a PRD using this structure, one `##` heading per section:
    > **User Story [n] — [short name] (Priority: P[n])**
    >
    > As a [persona / role], I want [capability, phrased as an outcome] so that [the benefit].
-   >
-   > **Why this priority:** [what makes this P[n] — what it depends on, what it unlocks, or what it supersedes. Ties back to the impact rank and to the other stories' priorities.]
    >
    > **Independent Test:** [how this story can be verified on its own — the observable behaviour a tester would set up and check, without depending on other unbuilt stories.]
    >
@@ -1459,7 +1457,6 @@ Produce a PRD using this structure, one `##` heading per section:
    > 6. **Given** [the boundary condition has cleared — e.g. count drops back below the cap], **When** [the action is retried], **Then** [normal behaviour resumes]. — *recovery / transition*
    > 7. **Given** [a UI that surfaces status or thresholds], **When** [it is displayed], **Then** [the state is conveyed by text or icon in addition to colour (never colour alone) to satisfy WCAG 2.1 AA], **And** [indicator colours meet a minimum 4.5:1 contrast ratio against their background]. — *accessibility / non-functional*
 
-   - **Why this priority** must reference the ranking and the neighbouring stories — a P2 that depends on a P1, or supersedes an earlier behaviour, says so. Don't assert a priority without the dependency reasoning.
    - **Independent Test** describes a self-contained check: the story should be verifiable without waiting on other unbuilt stories. If it genuinely can't be tested independently, say what it depends on rather than pretending it can.
    - **Acceptance Scenarios use Gherkin.** Every scenario is one behaviour written as `Given … When … Then …`, with `And` / `But` for extra context, actions, or outcomes. Steps are declarative (describe the state and the observable outcome, not the UI mechanics). Number the scenarios; a short trailing `— *label*` naming which ground it covers is encouraged.
    - **Every story carries at least one scenario — the happy path is the floor.** No story is exempt. A story with genuinely no interactive behaviour still gets its one happy-path scenario asserting the observable outcome.
