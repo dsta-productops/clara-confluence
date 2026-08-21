@@ -1438,6 +1438,8 @@ Produce a PRD using this structure, one `##` heading per section:
 
    **5b. Expanded stories** — follow the table with a detailed block for **every** story in it, in priority order. No story is table-only: each row above gets a matching block below, so the PRD is a complete build spec rather than a v0 with follow-ups deferred.
 
+   **Every user story must be accompanied by at least one acceptance scenario.** The summary-table rows, the expanded blocks, and their scenario sets are strictly 1:1 — no story ships without a corresponding scenario. A story with no scenario is an incomplete story, not an acceptable state.
+
    > **User Story [n] — [short name] (Priority: P[n])**
    >
    > As a [persona / role], I want [capability, phrased as an outcome] so that [the benefit].
@@ -1459,6 +1461,7 @@ Produce a PRD using this structure, one `##` heading per section:
    - **Why this priority** must reference the ranking and the neighbouring stories — a P2 that depends on a P1, or supersedes an earlier behaviour, says so. Don't assert a priority without the dependency reasoning.
    - **Independent Test** describes a self-contained check: the story should be verifiable without waiting on other unbuilt stories. If it genuinely can't be tested independently, say what it depends on rather than pretending it can.
    - **Acceptance Scenarios use Gherkin.** Every scenario is one behaviour written as `Given … When … Then …`, with `And` / `But` for extra context, actions, or outcomes. Steps are declarative (describe the state and the observable outcome, not the UI mechanics). Number the scenarios; a short trailing `— *label*` naming which ground it covers is encouraged.
+   - **Every story carries at least one scenario — the happy path is the floor.** No story is exempt. A story with genuinely no interactive behaviour still gets its one happy-path scenario asserting the observable outcome.
    - **Be robust — cover all the grounds, not just the happy path.** For each story with real interactive behaviour, work through this checklist and write a scenario for every class the story actually has:
      - **Happy path** — valid inputs produce the specific, named success outcome (a confirmation screen, a queue position, a status change) — never a vague "it works".
      - **Invalid / missing input** — each mandatory field or malformed input yields a clear, specific validation error the user can act on, and a path to correct it.
@@ -1468,7 +1471,7 @@ Produce a PRD using this structure, one `##` heading per section:
      - **Non-functional & accessibility** — whenever a story renders status, thresholds, or colour-coded indicators, add an accessibility scenario: status conveyed by **text or icon in addition to colour (never colour alone)** and indicator colours meeting **≥ 4.5:1 contrast** to satisfy **WCAG 2.1 AA**. Fold in other measurable non-functionals the story implies (latency, concurrency, audit).
    - **Ground every threshold and value in evidence.** Pull limits, statuses and messages from the Success criteria, the ranking, or the research — do not invent a `50`/`60`/contrast figure the inputs don't support. Where a specific threshold is genuinely unspecified, write the scenario with a `[TBD — needs the actual limit]` placeholder and raise it under Open questions rather than fabricating a number.
    - **Every `Then` is observable and specific** — a named message, screen, field, value, count, or state a tester can assert against. No `Then the system works correctly`.
-   - Where a story's evidence is too thin to write scenarios honestly, still give it a block, but replace the scenario list with a single `Acceptance Scenarios: TBD — needs [the specific input/decision still missing]` line and flag it in Open questions. A thin story keeps its block (with the gap named); it never silently drops back to table-only.
+   - **Thin evidence never means zero scenarios.** Where a story's evidence is too thin to specify every detail, still write at least the happy-path scenario as full Gherkin, using `[TBD — the specific value/decision still missing]` placeholders *inside* the `Given`/`When`/`Then` steps, and raise each gap under Open questions. Do not invent the missing specifics, and do not replace the scenario with a bare "TBD" line — every story keeps a real, structured scenario with the gaps named in place.
 6. **Success criteria** (measurable, capability-focused) — what the capability has to be able to do, and to what threshold. No "users will feel more confident" non-criteria.
 7. **Constraints and dependencies** — every external thing the work depends on; re-read with "what would block this?" in mind.
 8. **Open questions** — honest unknowns; the first draft is meant to be wrong in interesting ways.

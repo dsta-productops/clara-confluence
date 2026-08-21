@@ -50,7 +50,7 @@ confluenceContext:
   outputPathTemplate: 'Knowledge Base/{{track}}/PRDs/{{prd-title}}'
 visibility: public
 source: clara
-claraSourceSha: c7a2ecdd0ef802810e7bacbfe0fee7141a9e2050
+claraSourceSha: befc1b4fa1dba217b1f51bf782897ea0d0fb77fd
 copyBlock: Use CLARA's `prd-generator` for <programme name>.
 ---
 
@@ -79,6 +79,7 @@ Before sharing the PRD with stakeholders, walk through these checks. Most teams 
 - **Scope table** rolls every relevant rank up into a module (or explicitly drops it to Out of scope). No ranked problem is silently unaccounted for; "Out of scope" names the rank and the reason.
 - **User-story summary table** is ordered by priority, every row's `ID · rank · priority` ties back to the ranking, and every Evidence cell cites a real verbatim/observation with its source ref. Stories describe outcomes, not features.
 - **Expanded stories** exist for *every* story in the summary table (none is table-only), each with a **Why this priority** that references the ranking and neighbouring stories (dependencies/supersessions named) and an **Independent Test** that is genuinely self-contained (or names what it depends on).
+- **Every user story has at least one corresponding acceptance scenario** — table rows, expanded blocks, and scenario sets are strictly 1:1. No story is left without a scenario; a thin story still carries a full happy-path Gherkin scenario with `[TBD]` placeholders in its steps, never a bare "TBD" line.
 - **Acceptance Scenarios are robust Gherkin.** Each is one behaviour in `Given … When … Then …` (with `And`/`But`), and — for every story with real interactive behaviour — the set covers the grounds the story actually has: happy path, invalid/missing input, duplicate/conflict, boundary limits at the *exact* edges (soft vs hard, plus the transition back across the threshold, using concrete example values), state/permission, and an accessibility/non-functional scenario wherever status or colour-coding is shown (status by text/icon not colour alone; contrast ≥ 4.5:1; WCAG 2.1 AA). Every `Then` is observable and specific — a named message, value, count, or state, never "it works". No invented thresholds — unspecified limits are `[TBD]` placeholders raised in Open questions, and a thin story keeps its block but marks scenarios `TBD — needs [X]`.
 - **Constraints and dependencies** name every external thing the work depends on. Re-read with "what would block this?" in mind.
 - **Open questions** are honest. The first draft is supposed to be wrong in interesting ways; the open questions are where you flag what you don't know.
