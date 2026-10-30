@@ -1,0 +1,101 @@
+---
+title: Product strategy one-pager
+phase: research
+domain: digital
+tool: clara
+task: >-
+  draft a product strategy one-pager from the PRD and the Knowledge Base, then
+  help the user fill in what the Knowledge Base can't supply (owners, costs,
+  value, VCR, timelines)
+expectedOutput: >-
+  Markdown one-pager following the PMP Product Strategy One-Pager template: a
+  header block (product name, business owners, team, lifecycle stage, scale, end
+  users), then 6 numbered sections — Change log; Problem (Status quo, Vision,
+  Success metrics with an outcome-metrics table and a quarterly cost / value /
+  VCR table); Strategy (Proposed product strategy, Risks and mitigations
+  covering market, technical and team risk); Roadmap (6–12 month table); Open
+  issues (with owners); Appendix (Delivered). Everything the PRD and Knowledge
+  Base support is filled in with source refs; everything they can't supply is a
+  [TBD] placeholder, and CLARA asks the user for those items in one batch so she
+  can fill them in.
+inputsFrom:
+  - prd-generator
+  - research-synthesiser
+  - problem-impact-ranker
+  - persona-generator
+  - prior-knowledge-summariser
+confluenceContext:
+  inputs:
+    - what: The PRD
+      description: >-
+        Page under `Knowledge Base/{{track}}/PRDs/*` (falls back to
+        programme-wide). The primary source: problem statement, target users,
+        goals and non-goals, scope modules, success criteria, constraints, and
+        open questions all map into the one-pager. Ask the user which PRD if
+        multiple.
+    - what: Problem statement and Success criteria
+      description: >-
+        Problem-statement and Success-criteria sections of `Knowledge
+        Base/{{track}}/Research-synthesis`. Falls back to `Knowledge
+        Base/Programme-wide/Research-synthesis` when no track-level version
+        exists.
+    - what: Problem-impact ranking
+      description: >-
+        `Knowledge Base/{{track}}/Problem-impact-analysis` (falls back to
+        programme-wide). Sizes the problem and orders the roadmap.
+    - what: Personas for End users
+      description: >-
+        Pages under `Knowledge Base/{{track}}/Personas/*` or `Knowledge
+        Base/Programme-wide/Personas/*`.
+    - what: Prior knowledge (optional)
+      description: >-
+        `Knowledge Base/{{track}}/Prior-knowledge` (falls back to
+        programme-wide). Used for status-quo workarounds, related policy, and
+        earlier decisions.
+    - what: Original stakeholder ask
+      description: >-
+        Programme brief / charter / requesting note. Pages with 'brief', 'ask',
+        'charter' in titles.
+    - what: Existing one-pager (when revising)
+      description: >-
+        `Knowledge Base/{{track}}/One-pagers/{{product-name}}`. When it exists,
+        keep everything the user has already filled in or edited, and update it
+        rather than starting over.
+  outputPathTemplate: 'Knowledge Base/{{track}}/One-pagers/{{product-name}}'
+visibility: public
+source: clara
+claraSourceSha: 4c20db3de7728cafbc57392c8676201cdbfbe2c6
+copyBlock: Use CLARA's `product-strategy-one-pager` for <programme name>.
+---
+
+## What CLARA will ask you for
+
+- **Programme name** — your programme's name (e.g. SKYPROTECT).
+- **Track** — the slice of the programme this artefact belongs to (workstream, capability area, feature line, etc.), or `Programme-wide` if it spans tracks.
+- **Product name** — the name of the product the one-pager is for.
+- **PRD** — which PRD the one-pager builds on, if there is more than one.
+- **New or existing product** — is this a new product, or a strategy (re)written for one that already exists (e.g. a PM conversion)? For an existing product, the draft is not constrained by what has already been done and decided: it states how the strategy would be formulated today.
+- **Inputs** — CLARA will search the programme's Confluence space for the prd; problem statement and success criteria; problem-impact ranking; personas for end users; prior knowledge (optional); original stakeholder ask; existing one-pager (when revising). You can also paste fresh material if it's not in Confluence yet.
+
+## Where the output lands
+
+`Knowledge Base/{{track}}/One-pagers/{{product-name}}` inside your programme's Confluence space.
+
+## Tips
+
+- Run this after `prd-generator`. Most of the one-pager comes straight from the PRD; CLARA only asks you for what the Knowledge Base doesn't have.
+- Have your cost breakdown (Dev EOM, Ops EOM, hosting, other), your unit of impact, and your business owners ready — CLARA will ask for them and will not estimate them.
+- You don't have to answer every question in one sitting. File the draft with `[TBD]`s, then fill them in on the page yourself or re-run CLARA with the answers; she keeps what you've already edited.
+- Feedback on the one-pager template itself goes to the PMP: https://go.gov.sg/pmp-artifact-feedback
+
+## Before you circulate — self-review checklist
+
+- **Readable cold** — someone with no context of the problem space can follow it: acronyms spelled out, users named, no programme shorthand.
+- **Status quo** says who has the problem, how they cope today, what it costs not to act, and how big it is — with evidence and a source for the sizing. It names what you are **not** solving for.
+- **Vision** describes a future state, not a feature list.
+- **North star metric** is named and justified; every outcome metric has a baseline, target, and timeline, and is marked leading or lagging.
+- **VCR table** uses only real or user-supplied figures, names the unit of impact, distinguishes actuals from projections, and is assessed against a benchmark.
+- **Strategy** states falsifiable hypotheses, a theory of change, and guiding principles, and ties to agency policy and business objectives.
+- **Risks** cover market, technical, and team at minimum, each with a mitigation experiment and the metric that would prove it worked.
+- **Roadmap** covers 6–12 months and each initiative names the metric it moves.
+- **No `[TBD]` left** unless it is listed under Open issues with an owner.
